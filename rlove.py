@@ -96,9 +96,9 @@ from aiogram.contrib.middlewares.logging import LoggingMiddleware
 
 
 
-CHANNEL_ID = -1002031648635
-CHAT_ID = -4206621861
-ADMIN_CHAT_ID = -4206621861
+CHANNEL_ID = -1002186519643
+CHAT_ID = -4241857562
+ADMIN_CHAT_ID = -4241857562
 
 authorized_users = {983681689, 1228200514}
 
@@ -110,13 +110,13 @@ blocked_words = ['пидор', 'шлюхи', 'сосала', 'ебалась', '
                  'АЛИСА', 'АЛИСУ', 'алису', 'Алиса', 'Алису', 'сво', 'выебите', 'выебать', 'лылин', 'лылина', 'ЛЫЛИН', 'ЛЫЛИНА', 'Лылин', 'лЫЛИН', 'Серёг', 'Серёга', 'Серега', 'Серег', 'hui', 'теракт', 'ТЕРАКТ', 'Теракт', 'ИНОЗЕМЦЕВА', 'иноземцева', 'inozemceva'
                  ]
 banned_users = []
-moderation_chat_id = -4233907272
+moderation_chat_id = -4113344460
 
 moderation_messages = {}
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot('7406853745:AAE6w4kTAb27s3CqudbpyqmVhP46kNoqeZo')
+bot = Bot('7274863130:AAHuheJOpn_5dduSGI8eWEseUreqGi2HEyA')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
