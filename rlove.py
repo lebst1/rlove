@@ -86,21 +86,25 @@ async def update_user_stats(user_id: int, username: str):
 
 from aiogram import Dispatcher, Bot, executor, types, filters
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+   
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, ReplyKeyboardMarkup, KeyboardButton, \
     ChatPermissions
-from aiogram.utils.exceptions import BotBlocked
-from aiogram.utils.markdown import escape_md
 from aiogram.dispatcher.filters.state import StatesGroup, State
 from aiogram.dispatcher import FSMContext 
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 
-CHANNEL_ID = '@vrashkeonelove'
-CHAT_ID = -4241857562
-ADMIN_CHAT_ID = -4241857562
+
+
+CHANNEL_ID = -1002031648635
+CHAT_ID = -4206621861
+ADMIN_CHAT_ID = -4206621861
+
+authorized_users = {983681689, 1228200514}
 
 blocked_words = ['пидор', 'шлюхи', 'сосала', 'ебалась', 'солью', 'конченые', 'конченный', 'конч', 'конченый', 'ШЛЮХА', 'хуй', 'хуйло',
                  'уёбище', 'pidor', 'гандон', 'gandon', 'еблан', 'eblan', 'ебланище', 'eblanishe', 'долбаёб', 'хуйло', 'данилина',
-                 'пидорас', 'пидарас', 'гандонище', 'мразь', 'мразота', 'хуйлан', 'хуйланка', 'тварь', 'проститутка',
+                 'пидорас', 'пидарас', 'гандонище', 'мразь', 'мразота', 'хуйлан', 'хуйланка', 'тварь', 'проститутка', 
                  'шлюха', 'ебанутый', 'ебанутая', 'шаболда', 'группа', 'пидр', 'бабник', 'ебучий', 'ебучая', 'убился',
                  'убить', 'даун', 'СУКА', '/start', 'номер', 'мент', 'менты', 'ментам', 'органы', 'орган', 'полиция', 'полицию', 'заяву', 'накатаю', 'заявляение', 'уголовный', 'уголовно', 'тюрьма', 'штраф', 'закон', 'алиса',
                  'АЛИСА', 'АЛИСУ', 'алису', 'Алиса', 'Алису', 'сво', 'выебите', 'выебать', 'лылин', 'лылина', 'ЛЫЛИН', 'ЛЫЛИНА', 'Лылин', 'лЫЛИН', 'Серёг', 'Серёга', 'Серега', 'Серег', 'hui', 'теракт', 'ТЕРАКТ', 'Теракт', 'ИНОЗЕМЦЕВА', 'иноземцева', 'inozemceva'
@@ -112,7 +116,7 @@ moderation_messages = {}
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot('7274863130:AAHuheJOpn_5dduSGI8eWEseUreqGi2HEyA')
+bot = Bot('7406853745:AAE6w4kTAb27s3CqudbpyqmVhP46kNoqeZo')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 
@@ -218,10 +222,9 @@ async def send_chat_notification(message: types.Message):
         user = message.from_user
         text = (
             f"✉️ Новое сообщение от 👤 {user.mention} ({user.full_name})\n"
-            f"🆔 ID: {user.id}\n"
+            f"🆔 ID: tg://user?id= {user.id} \n"
             f"⏰ Время отправки: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
         )
-
         if message.text:
             text += f"💬 Текст: {message.text}\n"
         elif message.caption:
@@ -420,6 +423,25 @@ async def reject_photo_callback(query: types.CallbackQuery):
 async def block_youtube_links(message: types.Message):
     await message.reply("Извините, отправка YouTube ссылок запрещена.")
 
+
+# Создание группы состояний
+class States(StatesGroup):
+    waiting_for_message = State()
+
+# Обработчик команд
+@dp.message_handler(commands=['watch'])
+async def start_command(message: types.Message):
+    await message.answer("Я слежу за постом в канале!")
+
+
+async def handle_messages(message: types.Message):
+    user_id = message.from_user.id
+    
+    # Check if the message contains a GIF or sticker
+    if message.sticker or message.animation:
+        if user_id not in authorized_users:
+            await message.reply("🚫 Вы не можете отправлять GIF или стикеры.")
+            return  # Stop processing this message
 
 
 @dp.message_handler()
